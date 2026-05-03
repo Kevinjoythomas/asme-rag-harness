@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "asme-rag-eval"
+version = "0.1.0"
+description = "Reproducible evaluation harness for retrieval over engineering standards documents"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pymupdf>=1.24.0",
+    "sentence-transformers>=3.0.0",
+    "faiss-cpu>=1.8.0",
+    "rank-bm25>=0.2.2",
+    "pydantic>=2.7.0",
+    "neo4j>=5.20.0",
+    "pyyaml>=6.0.1",
+    "rich>=13.7.0",
+    "python-dotenv>=1.0.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+azure = [
+    "azure-ai-documentintelligence>=1.0.0b3",
+    "azure-core>=1.30.0",
+]
+tables = [
+    "pdfplumber>=0.11.0",
+]
+notebook = [
+    "jupyter>=1.0.0",
+    "matplotlib>=3.9.0",
+    "ipykernel>=6.29.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["N999"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -1,0 +1,179 @@
+# 20 evaluation queries for nasa_std_5019 + api_510 corpus
+# Clause mappings verified against actual parsed content.
+#
+# NASA-STD-5019 actual structure:
+#   4.1  Fracture Control Classification of Parts
+#   4.2  Methodology for Assessing Fracture-Critical Hardware
+#   4.3  Tracking for Fracture-Critical Parts
+#   4.4  Fracture Control Documentation
+#   4.5  Verification
+#   4.6  Alternatives
+#
+# API-510 actual structure:
+#   5.1  Inspection Plans
+#   6.1  Fitness for Service (general)
+#   7.1  Corrosion Rate Determination
+#   8.1  Repairs and Alterations
+#   9.1  Pressure Testing (scope)
+
+# --- IN-CORPUS DIRECT (8) ---
+
+- id: q01
+  category: in_corpus_direct
+  query: "What is the process for fracture control classification of spaceflight hardware parts?"
+  expected_clauses: ["4.1"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+- id: q02
+  category: in_corpus_direct
+  query: "What methods are acceptable to demonstrate damage tolerance for fracture-critical hardware?"
+  expected_clauses: ["4.2"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+- id: q03
+  category: in_corpus_direct
+  query: "What documentation must be maintained under configuration control for a fracture control program?"
+  expected_clauses: ["4.4"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+- id: q04
+  category: in_corpus_direct
+  query: "How is compliance with fracture control requirements verified and approved?"
+  expected_clauses: ["4.5"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+- id: q05
+  category: in_corpus_direct
+  query: "What must an inspection plan include for pressure vessels under API 510?"
+  expected_clauses: ["5.1"]
+  expected_documents: ["api_510"]
+  expect_abstain: false
+
+- id: q06
+  category: in_corpus_direct
+  query: "How is corrosion rate determined for an in-service pressure vessel?"
+  expected_clauses: ["7.1"]
+  expected_documents: ["api_510"]
+  expect_abstain: false
+
+- id: q07
+  category: in_corpus_direct
+  query: "What repair code requirements govern repairs and alterations to pressure vessels?"
+  expected_clauses: ["8.1"]
+  expected_documents: ["api_510"]
+  expect_abstain: false
+
+- id: q08
+  category: in_corpus_direct
+  query: "Under what conditions may alternatives to NASA fracture control requirements be proposed?"
+  expected_clauses: ["4.6"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+# --- IN-CORPUS CROSS-REFERENCE (4) ---
+
+- id: q09
+  category: in_corpus_cross_reference
+  query: "What specific analysis methods are referenced for demonstrating damage tolerance via fracture mechanics?"
+  expected_clauses: ["4.2"]
+  expected_referenced_clauses: ["4.2.1"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+- id: q10
+  category: in_corpus_cross_reference
+  query: "What safety requirements must a pressure vessel repair organization follow per API 510?"
+  expected_clauses: ["8.1"]
+  expected_referenced_clauses: ["5.3"]
+  expected_documents: ["api_510"]
+  expect_abstain: false
+
+- id: q11
+  category: in_corpus_cross_reference
+  query: "How are non-fracture-critical parts exempted from further fracture control activity?"
+  expected_clauses: ["4.1.1"]
+  expected_referenced_clauses: ["4.1"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+- id: q12
+  category: in_corpus_cross_reference
+  query: "What tracking records are required for fracture-critical parts throughout hardware life?"
+  expected_clauses: ["4.3"]
+  expected_referenced_clauses: ["4.4"]
+  expected_documents: ["nasa_std_5019"]
+  expect_abstain: false
+
+# --- OUT-OF-CORPUS ADVERSARIAL (5) ---
+# BM25 max scores confirmed < 10 for q13-q16; q17 is the documented hard case (BM25=11.9).
+
+- id: q13
+  category: out_of_corpus_adversarial
+  query: "What is the recommended paracetamol dosage for a 5-year-old child?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Completely unrelated domain. BM25≈8, cosine>0.40 — caught by BM25 gate."
+
+- id: q14
+  category: out_of_corpus_adversarial
+  query: "What is the boiling point of water at sea level in Celsius?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Basic physics. BM25≈9, cosine>0.40 — caught by BM25 gate."
+
+- id: q15
+  category: out_of_corpus_adversarial
+  query: "Who won the 2023 FIFA World Cup?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Orthogonal domain. BM25≈2 — easily caught by BM25 gate."
+
+- id: q16
+  category: out_of_corpus_adversarial
+  query: "What is the OSHA regulation for electrical lockout/tagout procedures?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Related safety domain but different corpus. BM25≈5 — caught by BM25 gate."
+
+- id: q17
+  category: out_of_corpus_adversarial
+  query: "What is the maximum allowable stress for A36 structural steel per AISC 360?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Hard adversarial. BM25≈12 due to steel/stress term overlap — passes BM25 gate. Documented failure mode: AISC 360 not in corpus but shares vocabulary with pressure vessel standards. Raising bm25_min_threshold to 12 would catch it but risks gating borderline in-corpus queries."
+
+# --- AMBIGUOUS / UNDERSPECIFIED (3) ---
+# In-domain vocabulary but too vague for a useful answer. BM25 8-9 → caught by BM25 gate.
+
+- id: q18
+  category: ambiguous
+  query: "What is the maximum pressure?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Underspecified. BM25≈9 — caught by BM25 gate despite domain relevance."
+
+- id: q19
+  category: ambiguous
+  query: "What are the safety requirements?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Too broad. BM25≈9 — caught by BM25 gate."
+
+- id: q20
+  category: ambiguous
+  query: "How do I pass inspection?"
+  expected_clauses: []
+  expected_documents: []
+  expect_abstain: true
+  note: "Colloquial. BM25≈9 — caught by BM25 gate."
