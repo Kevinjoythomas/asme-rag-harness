@@ -97,4 +97,4 @@ notebooks/
 
 ## License
 
-No license specified yet.
+MIT, see `LICENSE`.

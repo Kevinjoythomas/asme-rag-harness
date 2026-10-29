@@ -8,7 +8,7 @@ Design choices:
 - Citation graph traversal: referenced clauses are appended to the result set
   so downstream answer generation can follow the dependency chain.
 - Cross-encoder reranker: scaffold present but disabled by default
-  (BAAI/bge-reranker-v2-m3 on top-50 → top-5 gives ~4 point MRR lift).
+  (BAAI/bge-reranker-v2-m3 over the top 50; not evaluated in the reported runs).
 """
 from __future__ import annotations
 
